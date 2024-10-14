@@ -1,5 +1,6 @@
 package test.cuenta.service.Infrastructure.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +25,8 @@ public interface MovimientoJpaRepository extends JpaRepository<Movimiento, Long>
     default List<Movimiento> obtenerTodosLosMovimientos() {
         return findAll();
     }
+
+    List<Movimiento> findByCuenta_ClienteidAndFechaBetween(Long clientid, Date fechaInicio, Date fechaFin);
 
     @Override
     default Movimiento actualizarMovimiento(Long id, Movimiento movimientoDetalles) {

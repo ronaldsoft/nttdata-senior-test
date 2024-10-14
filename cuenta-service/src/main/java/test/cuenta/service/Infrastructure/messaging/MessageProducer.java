@@ -15,4 +15,8 @@ public class MessageProducer {
     public void enviarMensaje(String cola, Object mensaje) {
         rabbitTemplate.convertAndSend(cola, mensaje);
     }
+
+    public Object recibirMensaje(String cola, String mensaje) {
+        return rabbitTemplate.convertSendAndReceive(cola, mensaje);
+    }
 }

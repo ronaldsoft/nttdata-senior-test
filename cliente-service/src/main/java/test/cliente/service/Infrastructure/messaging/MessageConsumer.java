@@ -1,10 +1,12 @@
 package test.cliente.service.Infrastructure.messaging;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
 
 import test.cliente.service.Domain.model.Cliente;
 import test.cliente.service.Infrastructure.persistence.ClienteJpaRepository;
 
+@Component
 public class MessageConsumer {
     private final ClienteJpaRepository clienteJpaRepository;
 
@@ -13,21 +15,27 @@ public class MessageConsumer {
     }
 
     // Consumidor para crear clientes
-    @RabbitListener(queues = "crear-cliente")
+    @RabbitListener(queues = {})
     public void crear(Cliente cliente) {
         clienteJpaRepository.guardar(cliente);
         System.out.println("Cliente creado: " + cliente.getNombre());
     }
 
+    @RabbitListener(queues = RabbitMQConfig.CLIENT_QUEUE)
+    public Cliente obtenerClientePorId(String clienteId) {
+        long id = Long.parseLong(clienteId);
+        return clienteJpaRepository.obtenerPorId(id);
+    }
+
     // Consumidor para actualizar clientes
-    @RabbitListener(queues = "actualizar-cliente")
+    @RabbitListener(queues = {})
     public void actualizar(Long clienteId, Cliente cliente) {
         clienteJpaRepository.actualizarCliente(clienteId, cliente);
         System.out.println("Cliente actualizado: " + cliente.getNombre());
     }
 
     // Consumidor para eliminar clientes
-    @RabbitListener(queues = "eliminar-cliente")
+    @RabbitListener(queues = {})
     public void eliminar(Long clienteId) {
         clienteJpaRepository.eliminarCliente(clienteId);
         System.out.println("Cliente eliminado: " + clienteId);
