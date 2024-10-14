@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Puerto de administración de RabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: proof
+      RABBITMQ_DEFAULT_PASS: Proof123!
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root!12
+      MYSQL_DATABASE: proof
+      MYSQL_USER: proof
+      MYSQL_PASSWORD: Proof123!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  cliente-persona-service:
+    build:
+      context: ./cliente-service/  # Ruta del contexto donde está el Dockerfile
+      dockerfile: Dockerfile  # Nombre del archivo Dockerfile
+    ports:
+      - "8080:8081"
+    depends_on:
+      - rabbitmq
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+  cuenta-movimiento-service:
+    build:
+      context: ./cuenta-service/
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+volumes:
+  mysqldata:
+    driver: local
