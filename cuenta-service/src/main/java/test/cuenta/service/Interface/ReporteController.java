@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import test.cuenta.service.Domain.model.Cliente;
 import test.cuenta.service.Domain.model.Cuenta;
 import test.cuenta.service.Domain.model.Movimiento;
 import test.cuenta.service.Domain.model.Reporte;
@@ -41,16 +44,13 @@ public class ReporteController {
             Date fechaFin = dateFormat.parse(fechasSeparadas[1]);
             long id = Long.parseLong(clienteId);
             // Solicitar información del cliente
-            Object cliente = messageProducer.recibirMensaje("client-queue", clienteId);
-            System.err.println(cliente);
-            if (cliente != null) {
+            String cliente = (String) messageProducer.recibirMensaje("client-queue", clienteId);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Cliente persona = objectMapper.readValue(cliente, Cliente.class);
+            if (cliente == null) {
+                return new Response<>(0, "No existe el cliente", null);
             }
-            // System.err.println(cliente.getId());
-            // System.err.println(cliente.getNombre());
-            // if (cliente == null) {
-            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no
-            // encontrado");
-            // }
+
             List<Movimiento> movimientos = movimientoRepository.findByCuenta_ClienteidAndFechaBetween(id, fechaInicio,
                     fechaFin);
 
@@ -59,7 +59,7 @@ public class ReporteController {
                 Cuenta cuenta = movimiento.getCuenta(); // Suponiendo que Movimiento tiene una referencia a Cuenta
                 return new Reporte(
                         movimiento.getFecha(),
-                        "",
+                        persona.getNombre(),
                         cuenta.getNumeroCuenta(),
                         cuenta.getTipoCuenta(),
                         cuenta.getSaldoInicial(),
