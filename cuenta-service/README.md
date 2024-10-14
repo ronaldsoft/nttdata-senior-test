@@ -16,3 +16,12 @@ Para ejecutar las pruebas unitarias de manera local, usa el siguiente comando:
 
 ```bash
 mvn test
+```
+
+## Ejecutar Local Desarrollo
+
+Para ejecutar spring-boot en modo desarrollo, usa el siguiente comando:
+
+```bash
+mvn spring-boot:run
+```
