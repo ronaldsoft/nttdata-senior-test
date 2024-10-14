@@ -24,7 +24,14 @@ public class MessageConsumer {
     @RabbitListener(queues = RabbitMQConfig.CLIENT_QUEUE)
     public Cliente obtenerClientePorId(String clienteId) {
         long id = Long.parseLong(clienteId);
-        return clienteJpaRepository.obtenerPorId(id);
+        System.out.println("Consulta: " + clienteId);
+        Cliente response = clienteJpaRepository.obtenerPorId(id);
+        if (response != null) {
+            System.out.println("Consulta: " + response.getNombre());
+            return response;
+        } else {
+            return null;
+        }
     }
 
     // Consumidor para actualizar clientes
