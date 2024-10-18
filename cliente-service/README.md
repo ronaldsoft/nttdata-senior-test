@@ -20,8 +20,8 @@ mvn test
 
 ## Ejecutar Local Desarrollo
 
-Para ejecutar spring-boot en modo desarrollo, usa el siguiente comando:
+Para ejecutar spring-boot en modo desarrollo, usa el siguiente comando, este inicializa las variables de entorno:
 
 ```bash
-mvn spring-boot:run
+export $(cat .env | xargs) && mvn spring-boot:run
 ```

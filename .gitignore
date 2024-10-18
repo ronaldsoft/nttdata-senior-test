@@ -40,3 +40,6 @@ out/
 target/
 #mac files
 .DS_Store
+
+#enviroment files
+.env
