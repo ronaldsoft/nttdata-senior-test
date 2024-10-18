@@ -36,6 +36,12 @@ services:
       - mysql
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: proof
+      SPRING_RABBITMQ_PASSWORD: Proof123!
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/proof
+      SPRING_DATASOURCE_USERNAME: proof
+      SPRING_DATASOURCE_PASSWORD: Proof123!
 
   cuenta-movimiento-service:
     build:
@@ -48,6 +54,12 @@ services:
       - mysql
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: proof
+      SPRING_RABBITMQ_PASSWORD: Proof123!
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/proof
+      SPRING_DATASOURCE_USERNAME: proof
+      SPRING_DATASOURCE_PASSWORD: Proof123!
 
 volumes:
   mysqldata:
